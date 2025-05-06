@@ -10,5 +10,7 @@ def generate_buzzword():
 
 # Generate buzzword and save to JSON
 buzzword = generate_buzzword()
+print(f"Generated buzzword: {buzzword}")  # For debugging in Actions logs
+
 with open('buzzword.json', 'w') as f:
     json.dump({"buzzword": buzzword}, f)
