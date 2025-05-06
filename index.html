@@ -43,26 +43,94 @@
         .refresh:hover {
             background-color: #2980b9;
         }
+        footer {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Cybersecurity Buzzword Generator</h1>
         <div class="buzzword" id="buzzword">Loading...</div>
-        <button class="refresh" onclick="window.location.reload()">Generate New Buzzword</button>
+        <button class="refresh" onclick="generateBuzzword()">Generate New Buzzword</button>
     </div>
+    
+    <footer>
+        <p>Made with ❤️ for cybersecurity professionals</p>
+    </footer>
 
     <script>
-        // Fetch the buzzword from the JSON file
-        fetch('buzzword.json')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('buzzword').textContent = data.buzzword;
-            })
-            .catch(error => {
-                document.getElementById('buzzword').textContent = "Error loading buzzword";
-                console.error('Error:', error);
-            });
+        // Buzzword components
+        const adjectives = [
+            "Comprehensive", "AI-driven", "Advanced", "Next-generation", "Proactive", 
+            "Intelligent", "Automated", "Robust", "Integrated", "Holistic", 
+            "Real-time", "Cloud-native", "Enterprise-grade", "Strategic", "Tactical", 
+            "Adaptive", "Predictive", "Dynamic", "Continuous", "Seamless", 
+            "Resilient", "Agile", "Multi-layered", "Zero-trust", "Cutting-edge", 
+            "Transformative", "End-to-end", "Unified", "Scalable", "Autonomous", 
+            "Preemptive", "Enhanced", "Machine-learning", "Quantum-resistant", "Blockchain-based", 
+            "Cognitive", "Behavioral", "Contextual", "Threat-informed", "Actionable", 
+            "Orchestrated", "Frictionless", "Augmented", "Immersive", "Secure-by-design", 
+            "Future-proof", "Innovative", "Disruptive", "Precision", "Optimized"
+        ];
+
+        const nouns = [
+            "Risk", "Threat", "Security", "Vulnerability", "Compliance", 
+            "Data", "Network", "Endpoint", "Cloud", "Identity", 
+            "Access", "Incident", "Breach", "Attack", "Defense", 
+            "Intrusion", "Malware", "Phishing", "Ransomware", "Botnet", 
+            "Encryption", "Authentication", "Authorization", "Perimeter", "Posture", 
+            "Asset", "Configuration", "Governance", "Response", "Recovery", 
+            "Resilience", "Detection", "Prevention", "Mitigation", "Remediation", 
+            "Infrastructure", "Application", "Platform", "Framework", "System", 
+            "Protocol", "Visibility", "Awareness", "Capability", "Vector", 
+            "Surface", "Exposure", "Credential", "Exploitation", "Reconnaissance"
+        ];
+
+        const endings = [
+            "Management", "Intelligence", "Analytics", "Protection", "Monitoring", 
+            "Assessment", "Automation", "Platform", "Solution", "Framework", 
+            "Architecture", "Orchestration", "Control", "Visibility", "Governance", 
+            "Operations", "Response", "Readiness", "Hardening", "Validation", 
+            "Awareness", "Posture", "Strategy", "Defense", "Shield", 
+            "Guardian", "Sentinel", "Fortress", "Vault", "Firewall", 
+            "Insights", "Dashboard", "Portal", "Suite", "Toolkit", 
+            "Engine", "Ecosystem", "Matrix", "Paradigm", "Methodology", 
+            "Transformation", "Resilience", "Assurance", "Compliance", "Enforcement", 
+            "Detection", "Prevention", "Mitigation", "Remediation", "Optimization"
+        ];
+        
+        // Function to generate a random buzzword
+        function generateBuzzword() {
+            const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+            const noun = nouns[Math.floor(Math.random() * nouns.length)];
+            const ending = endings[Math.floor(Math.random() * endings.length)];
+            
+            const buzzword = `${adj} ${noun} ${ending}`;
+            document.getElementById('buzzword').textContent = buzzword;
+            return buzzword;
+        }
+        
+        // Initialize with a random buzzword when page loads
+        window.onload = function() {
+            // First try to load from server (your GitHub Actions generated one)
+            fetch('buzzword.json')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.buzzword) {
+                        document.getElementById('buzzword').textContent = data.buzzword;
+                    } else {
+                        generateBuzzword();
+                    }
+                })
+                .catch(error => {
+                    // If server fetch fails, generate one client-side
+                    console.log('Using client-side generation:', error);
+                    generateBuzzword();
+                });
+        };
     </script>
 </body>
 </html>
